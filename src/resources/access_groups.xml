@@ -1,0 +1,56 @@
+<groups>
+    <group login="Диспетчер">
+        <password></password>
+        <permissions>
+            <permission>see.lines</permission>
+            <permission>see.stations</permission>
+            <permission>see.trains</permission>
+            <permission>see.drivers</permission>
+            <permission>see.spans</permission>
+            <permission>see.changes</permission>
+            <permission>see.tickets</permission>
+            <permission>edit.lines</permission>
+            <permission>edit.stations</permission>
+            <permission>edit.trains</permission>
+            <permission>edit.drivers</permission>
+            <permission>edit.spans</permission>
+            <permission>edit.changes</permission>
+            <permission>edit.tickets</permission>
+            <permission>misc.station-visits</permission>
+            <permission>misc.add-visit</permission>
+            <permission>misc.register-ticket</permission>
+            <permission>misc.visits-stats</permission>
+        </permissions>
+    </group>
+    <group login="Пассажир">
+        <password>1234</password>
+        <permissions>
+            <permission>see.lines</permission>
+            <permission>see.stations</permission>
+            <permission>see.spans</permission>
+            <permission>see.changes</permission>
+            <!-- <permission>see.visits</permission> -->
+            <permission>misc.visits-stats</permission>
+        </permissions>
+    </group>
+    <group login="Кассир">
+        <password>1234</password>
+        <permissions>
+            <permission>see.lines</permission>
+            <permission>see.stations</permission>
+            <permission>see.spans</permission>
+            <permission>see.changes</permission>
+            <permission>see.visits</permission>
+            <permission>misc.add-visit</permission>
+            <permission>misc.visits-stats</permission>
+            <permission>misc.register-ticket</permission>
+        </permissions>
+    </group>
+    <group login="Турникет">
+        <password>1234</password>
+        <permissions>
+            <permission>misc.station-visits</permission>
+            <permission>misc.add-visit</permission>
+        </permissions>
+    </group>
+</groups>
