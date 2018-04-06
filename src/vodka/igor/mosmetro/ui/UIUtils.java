@@ -15,4 +15,8 @@ public class UIUtils {
                 JOptionPane.ERROR_MESSAGE
         );
     }
+
+    public static void error(String message) {
+        error(message, "Ошибка!");
+    }
 }

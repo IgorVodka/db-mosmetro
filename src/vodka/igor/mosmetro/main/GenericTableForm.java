@@ -1,10 +1,9 @@
 package vodka.igor.mosmetro.main;
 
 import vodka.igor.mosmetro.ui.*;
-import vodka.igor.mosmetro.models.Line;
+import vodka.igor.mosmetro.ui.wrapper.TableFormWrapper;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class GenericTableForm<T> extends JFrame implements ShowableForm {
@@ -34,13 +33,8 @@ public class GenericTableForm<T> extends JFrame implements ShowableForm {
 
         wrapper.customize(binding);
 
-        saveButton.addActionListener(actionEvent -> {
-            binding.saveAll();
-        });
-
-        deleteButton.addActionListener(actionEvent -> {
-            binding.markRowAsDeleted(linesTable.getSelectedRow());
-        });
+        saveButton.addActionListener(actionEvent -> binding.saveAll());
+        deleteButton.addActionListener(actionEvent -> binding.markRowAsDeleted(linesTable.getSelectedRow()));
 
         binding.loadAll();
     }

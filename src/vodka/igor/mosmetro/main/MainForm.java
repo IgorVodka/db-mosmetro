@@ -2,8 +2,10 @@ package vodka.igor.mosmetro.main;
 
 import vodka.igor.mosmetro.logic.*;
 import vodka.igor.mosmetro.ui.*;
+import vodka.igor.mosmetro.ui.wrapper.LinesTableFormWrapper;
+import vodka.igor.mosmetro.ui.wrapper.StationsTableFormWrapper;
+import vodka.igor.mosmetro.ui.wrapper.TableFormWrapper;
 
-import javax.persistence.Table;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -14,7 +16,7 @@ public class MainForm extends JFrame implements ShowableForm {
     private JLabel mainLabel;
     private JLabel authorizationInfo;
 
-    public MainForm() {
+    MainForm() {
         setContentPane(contentPane);
         setResizable(false);
         menuPanel.setLayout(new GridLayout(0, 2));
@@ -65,15 +67,14 @@ public class MainForm extends JFrame implements ShowableForm {
             menuPanel.add(btn);
 
             btn.addActionListener((ActionEvent e) -> {
-                TableFormWrapper<T> instance = null;
+                TableFormWrapper<T> instance;
                 try {
                     instance = wrapper.newInstance();
+                    GenericTableForm form = new GenericTableForm<>(instance);
+                    form.showForm();
                 } catch (Exception exc) {
                     exc.printStackTrace();
                 }
-
-                GenericTableForm form = new GenericTableForm<>(instance);
-                form.showForm();
             });
         }
     }

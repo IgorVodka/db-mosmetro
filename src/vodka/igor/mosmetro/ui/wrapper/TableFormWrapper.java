@@ -1,10 +1,11 @@
-package vodka.igor.mosmetro.ui;
+package vodka.igor.mosmetro.ui.wrapper;
 
 import org.hibernate.Session;
 import vodka.igor.mosmetro.listener.DatabaseRowLoadListener;
 import vodka.igor.mosmetro.listener.DatabaseRowSaveListener;
 import vodka.igor.mosmetro.logic.MetroManager;
 import vodka.igor.mosmetro.main.GenericTableForm;
+import vodka.igor.mosmetro.ui.TableDatabaseBinding;
 
 import javax.persistence.Query;
 import javax.swing.*;
@@ -12,7 +13,7 @@ import javax.swing.*;
 public abstract class TableFormWrapper<T> {
     GenericTableForm form;
 
-    public Session getSession() {
+    Session getSession() {
         return MetroManager.getInstance().getSession();
     }
 
@@ -25,9 +26,13 @@ public abstract class TableFormWrapper<T> {
     }
 
     abstract public String getName();
+
     abstract public Query getQuery();
+
     abstract public String[] getHeaders();
+
     abstract public DatabaseRowSaveListener<T> getSaveListener();
+
     abstract public DatabaseRowLoadListener<T> getLoadListener();
 
     abstract public void customize(TableDatabaseBinding<T> binding);

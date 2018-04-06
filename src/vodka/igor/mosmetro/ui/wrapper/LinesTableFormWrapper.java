@@ -1,13 +1,13 @@
-package vodka.igor.mosmetro.ui;
+package vodka.igor.mosmetro.ui.wrapper;
 
 import vodka.igor.mosmetro.listener.DatabaseRowLoadListener;
 import vodka.igor.mosmetro.listener.DatabaseRowSaveListener;
 import vodka.igor.mosmetro.main.GenericTableForm;
 import vodka.igor.mosmetro.models.Line;
-import vodka.igor.mosmetro.models.Station;
+import vodka.igor.mosmetro.ui.LineColorCellRenderer;
+import vodka.igor.mosmetro.ui.TableDatabaseBinding;
 
 import javax.persistence.Query;
-import javax.swing.*;
 import java.awt.*;
 
 public class LinesTableFormWrapper extends TableFormWrapper<Line> {
@@ -23,7 +23,7 @@ public class LinesTableFormWrapper extends TableFormWrapper<Line> {
 
     @Override
     public String[] getHeaders() {
-        return new String[] {
+        return new String[]{
                 "ID",
                 "Метка",
                 "Цвет",
@@ -42,7 +42,7 @@ public class LinesTableFormWrapper extends TableFormWrapper<Line> {
     public DatabaseRowLoadListener<Line> getLoadListener() {
         return line -> {
             Color color = line.getColor();
-            return new Object[] {
+            return new Object[]{
                     line.getId(),
                     line.getTag(),
                     String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue()),
@@ -69,7 +69,7 @@ public class LinesTableFormWrapper extends TableFormWrapper<Line> {
                 public Query getQuery() {
                     return getSession().createQuery(
                             "select s from stations s" +
-                            " where s.line = :line_id"
+                                    " where s.line = :line_id"
                     ).setParameter("line_id", selectedLine);
                 }
 
