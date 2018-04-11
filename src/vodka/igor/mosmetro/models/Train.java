@@ -39,10 +39,13 @@ public class Train {
 	private Date repairDate;
 	
 	private boolean onRoute = false;
-	
-	@ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY, mappedBy="trains")
-	private List<Line> lines = new ArrayList<>();
-	
+
+    //@ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY, mappedBy="trains")
+    //private List<Line> lines = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "train", cascade = CascadeType.ALL)
+    private List<LineTrain> trainLines = new ArrayList<>();
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "train", cascade=CascadeType.ALL)
 	private List<Driver> drivers = new ArrayList<>();
 
@@ -133,14 +136,6 @@ public class Train {
 		this.onRoute = onRoute;
 	}
 
-	public Collection<Line> getLines() {
-		return lines;
-	}
-	
-	public List<Driver> getDrivers() {
-		return drivers;
-	}
-	
 	public void addDriver(Driver driver) {
 		drivers.add(driver);
 		driver.setTrain(this);
@@ -150,14 +145,17 @@ public class Train {
 		drivers.remove(driver);
 		driver.setTrain(null);
 	}
-	
+
+    public List<LineTrain> getTrainLines() {
+        return trainLines;
+    }
+
 	public void addLine(Line line) {
-		lines.add(line);
-		line.getTrains().add(this);
-	}
-	
+        trainLines.add(new LineTrain(line, this));
+        //train.getTrainLines()...
+    }
+
 	public void removeLine(Line line) {
-		lines.remove(line);
-		line.getTrains().remove(this);
+        trainLines.removeIf(lineTrain -> lineTrain.getLine().equals(line));
 	}
 }

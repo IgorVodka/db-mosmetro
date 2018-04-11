@@ -9,6 +9,8 @@ import vodka.igor.mosmetro.ui.TableDatabaseBinding;
 
 import javax.persistence.Query;
 import javax.swing.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class TableFormWrapper<T> {
     GenericTableForm form;

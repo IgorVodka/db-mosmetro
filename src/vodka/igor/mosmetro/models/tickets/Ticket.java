@@ -36,7 +36,13 @@ public abstract class Ticket {
 	protected Double balance;
 	
 	public abstract String toString();
-	
+
+    abstract String getTicketTypeName();
+
+    public Integer getId() {
+        return id;
+    }
+
 	public void addVisit(Visit visit) {
 		visits.add(visit);
 		visit.setTicket(this);

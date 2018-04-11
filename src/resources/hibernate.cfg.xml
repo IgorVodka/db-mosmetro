@@ -29,11 +29,12 @@
         <mapping class="vodka.igor.mosmetro.models.Span"/>
         <mapping class="vodka.igor.mosmetro.models.Change"/>
         <mapping class="vodka.igor.mosmetro.models.Visit"/>
+        <mapping class="vodka.igor.mosmetro.models.LineTrain"/>
         
         <mapping class="vodka.igor.mosmetro.models.tickets.Ticket"/>
+        <mapping class="vodka.igor.mosmetro.models.tickets.DefaultTicket"/>
         <mapping class="vodka.igor.mosmetro.models.tickets.TroikaTicket" />
         <mapping class="vodka.igor.mosmetro.models.tickets.SocialTicket" />
-        <!-- <mapping class="vodka.igor.mosmetro.models.TicketType"/> -->
         
     </session-factory>
 </hibernate-configuration>

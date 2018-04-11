@@ -8,6 +8,7 @@
             <permission>see.drivers</permission>
             <permission>see.spans</permission>
             <permission>see.changes</permission>
+            <permission>see.visits</permission>
             <permission>see.tickets</permission>
             <permission>edit.lines</permission>
             <permission>edit.stations</permission>
@@ -15,6 +16,7 @@
             <permission>edit.drivers</permission>
             <permission>edit.spans</permission>
             <permission>edit.changes</permission>
+            <permission>edit.visits</permission>
             <permission>edit.tickets</permission>
             <permission>misc.station-visits</permission>
             <permission>misc.add-visit</permission>
@@ -49,7 +51,7 @@
     <group login="Турникет">
         <password>1234</password>
         <permissions>
-            <permission>misc.station-visits</permission>
+            <permission>see.visits</permission>
             <permission>misc.add-visit</permission>
         </permissions>
     </group>

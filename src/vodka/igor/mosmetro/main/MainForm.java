@@ -1,10 +1,10 @@
 package vodka.igor.mosmetro.main;
 
 import vodka.igor.mosmetro.logic.*;
+import vodka.igor.mosmetro.models.*;
+import vodka.igor.mosmetro.models.tickets.DefaultTicket;
 import vodka.igor.mosmetro.ui.*;
-import vodka.igor.mosmetro.ui.wrapper.LinesTableFormWrapper;
-import vodka.igor.mosmetro.ui.wrapper.StationsTableFormWrapper;
-import vodka.igor.mosmetro.ui.wrapper.TableFormWrapper;
+import vodka.igor.mosmetro.ui.wrapper.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -59,20 +59,31 @@ public class MainForm extends JFrame implements ShowableForm {
     }
 
     private <T> void addGenericFormButton(
-            String buttonText, Class<? extends TableFormWrapper<T>> wrapper, String permission
+            String buttonText,
+            Class<?> entityClass,
+            Class<? extends TableFormWrapper<T>> wrapperClass,
+            String permission
     ) {
         AccessGroup group = MetroManager.getInstance().getAccessGroup();
-        if (group.can(permission)) {
+
+        String seePermission = String.format("see.%s", permission);
+        String editPermission = String.format("edit.%s", permission);
+
+        if (group.can(seePermission)) {
             JButton btn = new JButton(buttonText);
             menuPanel.add(btn);
 
             btn.addActionListener((ActionEvent e) -> {
                 TableFormWrapper<T> instance;
                 try {
-                    instance = wrapper.newInstance();
-                    GenericTableForm form = new GenericTableForm<>(instance);
+                    instance = wrapperClass.newInstance();
+                    GenericTableForm form = new GenericTableForm<>(entityClass, instance);
                     form.showForm();
+                    if (!group.can(editPermission)) {
+                        form.disableEditFeatures();
+                    }
                 } catch (Exception exc) {
+                    UIUtils.error(exc.getMessage(), "Ошибка БД!");
                     exc.printStackTrace();
                 }
             });
@@ -85,13 +96,14 @@ public class MainForm extends JFrame implements ShowableForm {
         // надо, чтобы кроме showForm была showForm с дополнительным фильтром как аргумент (мб коллбэк просто)
         // чтобы можно было смотреть линии для станции например
         // addFormButton("Линии", GenericTableForm.class, "see.lines");
-        addGenericFormButton("Линии", LinesTableFormWrapper.class, "see.lines");
-        addGenericFormButton("Станции", StationsTableFormWrapper.class, "see.stations");
-        addFormButton("Поезда", MainForm.class, "see.trains");
-        addFormButton("Машинисты", MainForm.class, "see.drivers");
-        addFormButton("Перегоны", MainForm.class,  "see.spans");
-        addFormButton("Пересадки", MainForm.class, "see.changes");
-        addFormButton("Посещения станций", MainForm.class, "misc.station-visits");
+        addGenericFormButton("Линии", Line.class, LinesTableFormWrapper.class, "lines");
+        addGenericFormButton("Станции", Station.class, StationsTableFormWrapper.class, "stations");
+        addGenericFormButton("Поезда", Train.class, TrainsTableFormWrapper.class, "trains");
+        addGenericFormButton("Машинисты", Driver.class, DriversTableFormWrapper.class, "drivers");
+        addGenericFormButton("Перегоны", Span.class, SpansTableFormWrapper.class, "spans");
+        addGenericFormButton("Пересадки", Change.class, ChangesTableFormWrapper.class, "changes");
+        addGenericFormButton("Посещения станций", Visit.class, VisitsTableFormWrapper.class, "visits");
+        addGenericFormButton("Билеты", DefaultTicket.class, TicketsTableFormWrapper.class, "tickets");
         addFormButton("Добавить посещение", MainForm.class, "misc.add-visit");
         addFormButton("Зарегистрировать билет", MainForm.class, "misc.register-ticket");
         addFormButton("Статистика посещений", MainForm.class, "misc.visits-stats");

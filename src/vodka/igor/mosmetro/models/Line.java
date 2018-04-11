@@ -43,9 +43,12 @@ public class Line {
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "line", cascade=CascadeType.ALL)
 	private List<Station> stations = new ArrayList<>();
-	
-	@ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<Train> trains = new ArrayList<>();
+
+	//@ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+	//private List<Train> trains = new ArrayList<>();
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "line", cascade = CascadeType.ALL)
+	private List<LineTrain> lineTrains = new ArrayList<>();
 
 	public Integer getId() {
 		return id;
@@ -64,6 +67,7 @@ public class Line {
 	}
 
 	public Color getColor() {
+		if (color == null) return Color.WHITE;
 		return new Color(color);
 	}
 
@@ -93,17 +97,16 @@ public class Line {
 		station.setLine(null);
 	}
 
-	public List<Train> getTrains() {
-		return trains;
+	public List<LineTrain> getLineTrains() {
+		return lineTrains;
 	}
-	
+
 	public void addTrain(Train train) {
-		trains.add(train);
-		train.getLines().add(this);
+		lineTrains.add(new LineTrain(this, train));
+		//train.getTrainLines()...
 	}
-	
+
 	public void removeTrain(Train train) {
-		trains.remove(train);
-		train.getLines().remove(this);
+		lineTrains.removeIf(lineTrain -> lineTrain.getTrain().equals(train));
 	}
 }

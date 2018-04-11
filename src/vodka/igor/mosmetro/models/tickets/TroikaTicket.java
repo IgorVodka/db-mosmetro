@@ -33,7 +33,11 @@ public class TroikaTicket
 	
 	@Override
 	public String toString() {
-		return "Troika(" + getExpirationDate() + ", " + getBalance() + ")";
-	}
-	
+        return "Тройка (" + getExpirationDate() + ", " + getBalance() + ")";
+    }
+
+    @Override
+    public String getTicketTypeName() {
+        return "Тройка";
+    }
 }

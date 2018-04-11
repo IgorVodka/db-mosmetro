@@ -23,6 +23,11 @@ public class SocialTicket
 	
 	@Override
 	public String toString() {
-		return "Social(" + getExpirationDate() + ")";
+        return "Социальный (" + getExpirationDate() + ")";
+    }
+
+    @Override
+    public String getTicketTypeName() {
+        return "Социальный";
 	}
 }

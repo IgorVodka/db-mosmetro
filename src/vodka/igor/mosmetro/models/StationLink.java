@@ -2,15 +2,13 @@ package vodka.igor.mosmetro.models;
 
 import java.util.List;
 
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 
 @MappedSuperclass
+@Table(
+        uniqueConstraints =
+        @UniqueConstraint(columnNames = {"station1", "station2"})
+)
 public abstract class StationLink {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)

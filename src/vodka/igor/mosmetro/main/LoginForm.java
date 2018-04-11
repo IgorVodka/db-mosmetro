@@ -23,11 +23,7 @@ public class LoginForm extends JDialog {
         setModal(true);
         getRootPane().setDefaultButton(buttonLogin);
 
-        buttonLogin.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onLogin();
-            }
-        });
+        buttonLogin.addActionListener(e -> onLogin());
 
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -59,6 +55,7 @@ public class LoginForm extends JDialog {
         } catch (GroupNotFoundException e) {
             UIUtils.error("Группа не найдена!", "Ошибка авторизации");
         } catch (Exception e) {
+            UIUtils.error(e.getMessage());
             e.printStackTrace();
         }
     }
