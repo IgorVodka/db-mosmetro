@@ -37,6 +37,7 @@ public class GenericTableForm<T> extends JFrame implements ShowableForm {
     public GenericTableForm(Class<?> entityClass, TableFormWrapper<T> wrapper) {
         setContentPane(contentPane);
         setResizable(false);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         controlButtons = new ArrayList<>();
 

@@ -93,9 +93,6 @@ public class MainForm extends JFrame implements ShowableForm {
     public void showForm() {
         authorizationInfo.setText("Вы авторизованы как " + MetroManager.getInstance().getAccessGroup().getName());
 
-        // надо, чтобы кроме showForm была showForm с дополнительным фильтром как аргумент (мб коллбэк просто)
-        // чтобы можно было смотреть линии для станции например
-        // addFormButton("Линии", GenericTableForm.class, "see.lines");
         addGenericFormButton("Линии", Line.class, LinesTableFormWrapper.class, "lines");
         addGenericFormButton("Станции", Station.class, StationsTableFormWrapper.class, "stations");
         addGenericFormButton("Поезда", Train.class, TrainsTableFormWrapper.class, "trains");
@@ -104,9 +101,9 @@ public class MainForm extends JFrame implements ShowableForm {
         addGenericFormButton("Пересадки", Change.class, ChangesTableFormWrapper.class, "changes");
         addGenericFormButton("Посещения станций", Visit.class, VisitsTableFormWrapper.class, "visits");
         addGenericFormButton("Билеты", DefaultTicket.class, TicketsTableFormWrapper.class, "tickets");
-        addFormButton("Добавить посещение", MainForm.class, "misc.add-visit");
-        addFormButton("Зарегистрировать билет", MainForm.class, "misc.register-ticket");
-        addFormButton("Статистика посещений", MainForm.class, "misc.visits-stats");
+        addFormButton("??? Добавить посещение", MainForm.class, "misc.add-visit");
+        addFormButton("??? Зарегистрировать билет", MainForm.class, "misc.register-ticket");
+        addFormButton("Статистика посещений", StatsForm.class, "misc.visits-stats");
 
         validate();
         pack();

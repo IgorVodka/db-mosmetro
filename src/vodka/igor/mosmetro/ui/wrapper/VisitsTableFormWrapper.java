@@ -59,6 +59,9 @@ public class VisitsTableFormWrapper extends TableFormWrapper<Visit> {
 
     @Override
     public void customize(TableDatabaseBinding<Visit> binding) {
+        binding.getModel().overrideColumnClass("Станция", StationItem.class);
+        binding.getModel().overrideColumnClass("Билет", TicketItem.class);
+
         JComboBox stationsComboBox = StationItem.createStationsComboBox(getSession());
         binding.getTableControl().getColumn("Станция")
                 .setCellEditor(new DefaultCellEditor(stationsComboBox));

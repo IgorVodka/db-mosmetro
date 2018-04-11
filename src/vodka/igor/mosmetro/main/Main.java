@@ -5,6 +5,7 @@ import java.util.List;
 import java.awt.*;
 import java.io.File;
 import java.sql.Date;
+import java.util.Random;
 
 import javax.persistence.Query;
 import javax.swing.*;
@@ -63,6 +64,8 @@ public class Main {
 	
 	public Visit createVisit(Ticket ticket) {
 		Visit visit = new Visit(ticket);
+		Random r = new Random();
+		visit.setDate(new Date(117, 1, r.nextInt() % 15));
 		session.save(visit);
 		return visit;
 	}
@@ -138,9 +141,9 @@ public class Main {
 			System.out.println(t);
 		}
 
-		Station bulvarro = line.getStations().get(0);
-		bulvarro.addVisit(createVisit(ticket));
-		
+		addRandomVisitsForLine(line, ticket);
+		addRandomVisitsForLine(line2, ticket);
+
 		session.getTransaction().commit();
 		
 		List<Span> wowSpans = line.getStations().get(1).getSpans();
@@ -178,6 +181,16 @@ public class Main {
 		manager.setSession(session);
 
 		new MainForm().showForm();
+	}
+
+	private void addRandomVisitsForLine(Line line, Ticket ticket) {
+		Random r = new Random();
+		for (int i = 0; i < line.getStations().size(); i++) {
+			int times = r.nextInt() % 250 + 100;
+			for (int j = 0; j < times; j++) {
+				line.getStations().get(i).addVisit(createVisit(ticket));
+			}
+		}
 	}
 
 	private void exit() {
