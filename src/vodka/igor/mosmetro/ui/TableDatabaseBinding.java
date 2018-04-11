@@ -1,16 +1,19 @@
 package vodka.igor.mosmetro.ui;
 
 import org.hibernate.Session;
+import org.hibernate.exception.ConstraintViolationException;
 import vodka.igor.mosmetro.listener.DatabaseRowLoadListener;
 import vodka.igor.mosmetro.listener.DatabaseRowSaveListener;
 import vodka.igor.mosmetro.logic.CustomTableModel;
 import vodka.igor.mosmetro.logic.MetroManager;
+import vodka.igor.mosmetro.main.GenericTableForm;
 
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.Query;
 import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;
+import java.awt.event.WindowEvent;
 import java.util.*;
 import java.util.List;
 
@@ -22,14 +25,16 @@ public class TableDatabaseBinding<T> {
     protected CustomTableModel tableModel;
     protected List<T> entitiesBound;
     protected Map<String, Object> fixedCols;
+    protected GenericTableForm form;
     private DatabaseRowLoadListener<T> rowLoadListener;
     private DatabaseRowSaveListener<T> rowSaveListener;
 
-    public TableDatabaseBinding(Class<?> entityClass, Query query, JTable tableControl) {
+    public TableDatabaseBinding(Class<?> entityClass, Query query, JTable tableControl, GenericTableForm form) {
         this.entityClass = entityClass;
         this.session = MetroManager.getInstance().getSession();
         this.query = query;
         this.tableControl = tableControl;
+        this.form = form;
 
         this.tableModel = new CustomTableModel(this);
         tableControl.setModel(tableModel);
@@ -143,35 +148,46 @@ public class TableDatabaseBinding<T> {
     }
 
     public void loadAll() {
-        clearModel();
+        try {
+            clearModel();
 
-        List result = query.getResultList();
-        entitiesBound.clear();
-        for (Object o : result) {
-            entitiesBound.add((T) o);
-            tableModel.addRow(rowLoadListener.rowDisplayed((T) o));
+            List result = query.getResultList();
+            entitiesBound.clear();
+            for (Object o : result) {
+                entitiesBound.add((T) o);
+                tableModel.addRow(rowLoadListener.rowDisplayed((T) o));
+            }
+
+            resizeColumnWidth(tableControl);
+
+            tableControl.getColumn(tableControl.getColumnName(0)).setCellRenderer(
+                    new IDTableCellRenderer(tableModel)
+            );
+        } catch (IllegalStateException exc) {
+            UIUtils.error("Невозможно получить данные для данной сущности.");
+            form.closeForm();
+        } catch (Exception exc) {
+            UIUtils.error("Ошибка получения данных!", exc.getClass().getSimpleName());
         }
-
-        resizeColumnWidth(tableControl);
-
-        tableControl.getColumn(tableControl.getColumnName(0)).setCellRenderer(
-                new IDTableCellRenderer(tableModel)
-        );
     }
 
     public void saveAll() {
         try {
+            session.beginTransaction();
             for (int i = 0; i < tableModel.getRowCount(); i++) {
-                session.beginTransaction();
                 if (tableModel.isMarkedAsDeleted(i)) {
                     try {
                         session.delete(getEntityByRow(i));
                         unmarkRowAsDeleted(i);
                         session.getTransaction().commit();
-                    } catch (EntityNotFoundException exc) {
+                    } catch (EntityNotFoundException | ConstraintViolationException exc) {
                         UIUtils.error("Невозможно удалить сущность, т.к. существуют связанные сущности.");
                     } catch (Exception exc) {
                         UIUtils.error("Ошибка удаления!");
+                    } finally {
+                        if (session.getTransaction().isActive()) {
+                            session.getTransaction().rollback();
+                        }
                     }
                     continue;
                 }
@@ -182,13 +198,14 @@ public class TableDatabaseBinding<T> {
                 }
                 entitiesBound.set(i, rowSaveListener.rowSaved(entitiesBound.get(i), data));
                 session.saveOrUpdate(entitiesBound.get(i));
-                session.getTransaction().commit();
             }
+            session.getTransaction().commit();
             this.loadAll();
         } catch (Exception exc) {
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
                 exc.printStackTrace();
+                form.reloadEverything(this);
                 UIUtils.error("Ошибка обновления!", exc.getClass().getSimpleName());
             }
         }

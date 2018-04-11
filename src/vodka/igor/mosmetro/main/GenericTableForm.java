@@ -10,12 +10,11 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.event.RowSorterEvent;
-import javax.swing.event.RowSorterListener;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class GenericTableForm<T> extends JFrame implements ShowableForm {
+    private final TableFormWrapper<T> wrapper;
     private JPanel contentPane;
     private JTable entitiesTable;
     private JToolBar controls;
@@ -43,12 +42,14 @@ public class GenericTableForm<T> extends JFrame implements ShowableForm {
 
         setTitle(wrapper.getName());
 
-        wrapper.setForm(this);
+        this.wrapper = wrapper;
+        this.wrapper.setForm(this);
 
         TableDatabaseBinding<T> binding = new TableDatabaseBinding<>(
                 entityClass,
                 wrapper.getQuery(),
-                entitiesTable
+                entitiesTable,
+                this
         );
 
         binding.setHeaders(wrapper.getHeaders());
@@ -61,11 +62,7 @@ public class GenericTableForm<T> extends JFrame implements ShowableForm {
         deleteButton.addActionListener(actionEvent -> binding.markRowAsDeleted(entitiesTable.getSelectedRow()));
         addButton.addActionListener(actionEvent -> binding.addEmptyEntity(entitiesTable.getSelectedRow()));
         refreshButton.addActionListener(actionEvent -> {
-            controlButtons.forEach(button -> controls.remove(button));
-            controlButtons.clear();
-            deleteButton.setEnabled(false);
-            wrapper.customize(binding);
-            binding.loadAll();
+            reloadEverything(binding);
         });
         enableButtonsOnSelection();
 
@@ -74,21 +71,26 @@ public class GenericTableForm<T> extends JFrame implements ShowableForm {
                     public void changedUpdate(DocumentEvent e) {
                         handle();
                     }
-
                     public void removeUpdate(DocumentEvent e) {
                         handle();
                     }
-
                     public void insertUpdate(DocumentEvent e) {
                         handle();
                     }
-
                     private void handle() {
                         binding.updateFilter(searchField.getText());
                     }
                 }
         );
 
+        wrapper.customize(binding);
+        binding.loadAll();
+    }
+
+    public void reloadEverything(TableDatabaseBinding binding) {
+        controlButtons.forEach(button -> controls.remove(button));
+        controlButtons.clear();
+        deleteButton.setEnabled(false);
         wrapper.customize(binding);
         binding.loadAll();
     }
@@ -124,5 +126,15 @@ public class GenericTableForm<T> extends JFrame implements ShowableForm {
         validate();
         pack();
         setVisible(true);
+    }
+
+    public void closeForm() {
+        GenericTableForm form = this;
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                form.setVisible(false);
+                form.dispose();
+            }
+        });
     }
 }
