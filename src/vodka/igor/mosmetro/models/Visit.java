@@ -16,7 +16,7 @@ import vodka.igor.mosmetro.models.tickets.Ticket;
 @Entity(name="visits")
 public class Visit {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
 	@ManyToOne(fetch=FetchType.LAZY)

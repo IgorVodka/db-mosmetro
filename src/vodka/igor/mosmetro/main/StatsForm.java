@@ -37,6 +37,8 @@ public class StatsForm extends JFrame implements ShowableForm {
     private JPanel infoPane;
 
     public StatsForm() {
+        setTitle("Статистика посещений");
+
         setContentPane(contentPane);
         setPreferredSize(new Dimension(900, 450));
         setMaximumSize(new Dimension(900, 450));

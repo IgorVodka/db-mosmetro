@@ -19,6 +19,7 @@ public class LoginForm extends JDialog {
     private AccessGroup accessGroup = null;
 
     LoginForm() {
+        setTitle("Авторизация");
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonLogin);

@@ -23,7 +23,7 @@ public class Train {
 	final static int YEARS_TILL_REPAIR = 1;
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
 	@Column(unique=true, nullable=false)

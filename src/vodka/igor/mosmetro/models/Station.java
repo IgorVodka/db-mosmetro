@@ -29,7 +29,7 @@ import javax.swing.event.ListSelectionEvent;
 )
 public class Station {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
 	@Column(name="station_name", length=32)

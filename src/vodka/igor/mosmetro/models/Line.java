@@ -17,7 +17,7 @@ import javax.persistence.OneToMany;
 @Entity(name="lines")
 public class Line {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
 	public Line(String lineName, Integer color, String tag) {

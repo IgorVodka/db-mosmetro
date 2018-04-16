@@ -45,7 +45,7 @@ public class AccessGroup {
     }
 
     private Document loadGroupsConfiguration() throws SAXException, IOException, ParserConfigurationException {
-        File xml = new File("src/resources/access_groups.xml");
+        File xml = new File("resources/access_groups.xml");
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document doc = builder.parse(xml);

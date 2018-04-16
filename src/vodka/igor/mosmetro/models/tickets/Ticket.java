@@ -26,7 +26,7 @@ import vodka.igor.mosmetro.models.Visit;
 )
 public abstract class Ticket {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="ticket", cascade=CascadeType.ALL)
@@ -37,7 +37,7 @@ public abstract class Ticket {
 	
 	public abstract String toString();
 
-    abstract String getTicketTypeName();
+    public abstract String getTicketTypeName();
 
     public Integer getId() {
         return id;

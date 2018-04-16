@@ -9,7 +9,7 @@ import javax.persistence.*;
 )
 public class LineTrain {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)

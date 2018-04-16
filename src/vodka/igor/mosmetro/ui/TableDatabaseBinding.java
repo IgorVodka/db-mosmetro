@@ -199,7 +199,9 @@ public class TableDatabaseBinding<T> {
                 entitiesBound.set(i, rowSaveListener.rowSaved(entitiesBound.get(i), data));
                 session.saveOrUpdate(entitiesBound.get(i));
             }
-            session.getTransaction().commit();
+            if (session.getTransaction().isActive()) {
+                session.getTransaction().commit();
+            }
             this.loadAll();
         } catch (Exception exc) {
             if (session.getTransaction().isActive()) {

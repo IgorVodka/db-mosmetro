@@ -33,7 +33,8 @@ public class StationsTableFormWrapper extends TableFormWrapper<Station> {
         return new String[]{
                 "ID",
                 "Название станции",
-                "Линия"
+                "Линия",
+                "Конечная"
         };
     }
 
@@ -52,13 +53,17 @@ public class StationsTableFormWrapper extends TableFormWrapper<Station> {
                 new Object[]{
                         new IDItem(station.getId()),
                         station.getStationName(),
-                        new LineItem(station.getLine())
+                        new LineItem(station.getLine()),
+                        station.getSpans().size() < 2
                 };
     }
 
     @Override
     public void customize(TableDatabaseBinding<Station> binding) {
         binding.getModel().overrideColumnClass("Линия", LineItem.class);
+        binding.getModel().overrideColumnClass("Конечная", Boolean.class);
+
+        binding.addFixedColumn("Конечная", true);
 
         binding.getTableControl().getColumn("Название станции")
                 .setCellRenderer(new ColorCellRenderer() {

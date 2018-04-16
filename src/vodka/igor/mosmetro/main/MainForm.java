@@ -101,9 +101,10 @@ public class MainForm extends JFrame implements ShowableForm {
         addGenericFormButton("Пересадки", Change.class, ChangesTableFormWrapper.class, "changes");
         addGenericFormButton("Посещения станций", Visit.class, VisitsTableFormWrapper.class, "visits");
         addGenericFormButton("Билеты", DefaultTicket.class, TicketsTableFormWrapper.class, "tickets");
-        addFormButton("??? Добавить посещение", MainForm.class, "misc.add-visit");
-        addFormButton("??? Зарегистрировать билет", MainForm.class, "misc.register-ticket");
+        addFormButton("Добавить посещение", AddStationVisitForm.class, "misc.add-visit");
+        addFormButton("Зарегистрировать билет", RegisterTicketForm.class, "misc.register-ticket");
         addFormButton("Статистика посещений", StatsForm.class, "misc.visits-stats");
+        addFormButton("О программе", AboutDialog.class);
 
         validate();
         pack();
