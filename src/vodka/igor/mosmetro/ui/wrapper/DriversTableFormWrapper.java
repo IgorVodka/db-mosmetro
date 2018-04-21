@@ -29,7 +29,8 @@ public class DriversTableFormWrapper extends TableFormWrapper<Driver> {
                 "ID",
                 "ФИО",
                 "Дата рождения",
-                "Поезд"
+                "Поезд",
+                "Работает"
         };
     }
 
@@ -39,6 +40,7 @@ public class DriversTableFormWrapper extends TableFormWrapper<Driver> {
             driver.setFullName(Validator.getString(row.get("ФИО"), driver.getFullName()));
             driver.setBirthDate(Validator.getDate(row.get("Дата рождения"), driver.getBirthDate()));
             driver.setTrain(((TrainItem) row.get("Поезд")).getTrain());
+            driver.setWorking(Boolean.valueOf(String.valueOf(row.get("Работает"))));
             return driver;
         };
     }
@@ -49,14 +51,16 @@ public class DriversTableFormWrapper extends TableFormWrapper<Driver> {
                 new Object[]{
                         new IDItem(driver.getId()),
                         driver.getFullName(),
-                        driver.getBirthDate().toString(),
-                        new TrainItem(driver.getTrain())
+                        String.valueOf(driver.getBirthDate()),
+                        new TrainItem(driver.getTrain()),
+                        driver.isWorking()
                 };
     }
 
     @Override
     public void customize(TableDatabaseBinding<Driver> binding) {
         binding.getModel().overrideColumnClass("Поезд", TrainItem.class);
+        binding.getModel().overrideColumnClass("Работает", Boolean.class);
 
         JComboBox comboBox = TrainItem.createTrainsComboBox(getSession());
         binding.getTableControl().getColumn("Поезд")

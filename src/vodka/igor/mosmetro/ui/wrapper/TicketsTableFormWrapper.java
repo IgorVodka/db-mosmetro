@@ -3,6 +3,9 @@ package vodka.igor.mosmetro.ui.wrapper;
 import vodka.igor.mosmetro.listener.DatabaseRowLoadListener;
 import vodka.igor.mosmetro.listener.DatabaseRowSaveListener;
 import vodka.igor.mosmetro.logic.Validator;
+import vodka.igor.mosmetro.main.GenericTableForm;
+import vodka.igor.mosmetro.models.Station;
+import vodka.igor.mosmetro.models.Visit;
 import vodka.igor.mosmetro.models.tickets.BalanceTicket;
 import vodka.igor.mosmetro.models.tickets.ExpirableTicket;
 import vodka.igor.mosmetro.models.tickets.Ticket;
@@ -10,6 +13,8 @@ import vodka.igor.mosmetro.ui.ColorCellRenderer;
 import vodka.igor.mosmetro.ui.TableDatabaseBinding;
 import vodka.igor.mosmetro.ui.UIUtils;
 import vodka.igor.mosmetro.ui.item.IDItem;
+import vodka.igor.mosmetro.ui.item.StationItem;
+import vodka.igor.mosmetro.ui.item.TicketItem;
 import vodka.igor.mosmetro.ui.item.TicketTypeItem;
 
 import javax.persistence.Query;
@@ -121,6 +126,32 @@ public class TicketsTableFormWrapper extends TableFormWrapper<Ticket> {
                 }
                 return Color.LIGHT_GRAY;
             }
+        });
+
+        getForm().addControlButtonIf("see.visits", "Посещения", actionEvent -> {
+            Ticket selectedTicket = binding.getSelectedEntity();
+
+            VisitsTableFormWrapper wrapper = new VisitsTableFormWrapper() {
+                @Override
+                public Query getQuery() {
+                    return getSession().createQuery(
+                            "select v from visits v" +
+                                    " where v.ticket = :ticket"
+                    ).setParameter("ticket", selectedTicket);
+                }
+
+                @Override
+                public String getName() {
+                    return "Посещения билета " + selectedTicket.getId();
+                }
+
+                @Override
+                public void customize(TableDatabaseBinding<Visit> binding) {
+                    super.customize(binding);
+                    binding.addFixedColumn("Билет", new TicketItem(selectedTicket));
+                }
+            };
+            new GenericTableForm<>(Visit.class, wrapper).showForm();
         });
     }
 }

@@ -77,6 +77,8 @@ public class TrainsTableFormWrapper extends TableFormWrapper<Train> {
                     public Color getColorForCell(int row, int column) {
                         Train train = binding.getEntityByRow(row);
                         Date oneYearAgo = Date.valueOf(LocalDate.now().minusYears(1));
+                        if(train.getRepairDate() == null)
+                            return Color.WHITE;
                         return train.getRepairDate().before(oneYearAgo) ? Color.RED : Color.GREEN;
                     }
                 });

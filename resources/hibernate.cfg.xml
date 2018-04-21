@@ -19,7 +19,7 @@
         <property name="show_sql">true</property>
  
         <!-- Drop and re-create all database on startup -->
-        <property name="hibernate.hbm2ddl.auto">create</property>
+        <property name="hibernate.hbm2ddl.auto">validate</property>
  
         <!-- Annotated entity classes -->
         <mapping class="vodka.igor.mosmetro.models.Station"/>

@@ -39,22 +39,6 @@ public class Main {
 		session.save(station);
 		return station;
 	}
-	
-	public Train createTrain(Integer number, String model, Date productionDate) {
-		Train train = new Train(number, model);
-		train.setProductionDate(productionDate);
-		train.refreshRepairDate();
-		session.save(train);
-		
-		return train;
-	}
-	
-	public Driver createDriver(String name, Date birthDate, boolean isWorking) {
-		Driver driver = new Driver(name, birthDate, isWorking);
-		session.save(driver);
-		
-		return driver;
-	}
 
     public Span createSpanBetween(Station station1, Station station2, Integer length) {
         Span span = station1.spanTo(station2, length);
@@ -94,6 +78,21 @@ public class Main {
 		session = sessionFactory.openSession();
 		session.beginTransaction();
 
+        //migrate();
+
+		session.getTransaction().commit();
+
+		AccessGroup group = new LoginForm().showDialog();
+		if(group == null)
+            exit();
+		MetroManager manager = MetroManager.getInstance();
+		manager.setAccessGroup(group);
+		manager.setSession(session);
+
+		new MainForm().showForm();
+	}
+
+    private void migrate() {
         Line line1 = createLine("Сокольническая", Color.RED, "1");
         line1.addStation(createStation("Бульвар Рокоссовского")); // 0
         line1.addStation(createStation("Черкизовская")); // 1
@@ -185,18 +184,7 @@ public class Main {
         addRandomVisitsForLine(line3, tickets);
         addRandomVisitsForLine(line4, tickets);
         addRandomVisitsForLine(line5, tickets);
-
-		session.getTransaction().commit();
-
-		AccessGroup group = new LoginForm().showDialog();
-		if(group == null)
-            exit();
-		MetroManager manager = MetroManager.getInstance();
-		manager.setAccessGroup(group);
-		manager.setSession(session);
-
-		new MainForm().showForm();
-	}
+    }
 
     private void addRandomVisitsForLine(Line line, List<Ticket> tickets) {
 		for (int i = 0; i < line.getStations().size(); i++) {
@@ -275,6 +263,7 @@ public class Main {
         driver.setFullName(name);
         driver.setBirthDate(birthDate);
         driver.setTrain(train);
+        driver.setWorking(r.nextBoolean());
         session.save(driver);
     }
 
